@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material/dialog';
 // import { catchError, from, throwError } from 'rxjs';
 // import { toObservable, toSignal, outputToObservable, outputFromObservable } from '@angular/core/rxjs-interop';
 import { openEditCourseDialog } from '../edit-course-dialog/edit-course-dialog.component';
+import { LoadingService } from '../loading/loading.service';
+import { MessagesService } from '../messages/messages.service';
 
 @Component({
     selector: 'home',
@@ -27,6 +29,8 @@ export class HomeComponent {
     private coursesService = inject(CoursesService);
 
     private matDialog = inject(MatDialog);
+
+    messagesService = inject(MessagesService);
 
     constructor() {
         console.log('HomeComponent constructor');
@@ -57,6 +61,7 @@ export class HomeComponent {
             const courses = await this.coursesService.getAllCourses();
             this.#courses.set(courses.sort(sortCoursesBySeqNo));
         } catch (error) {
+            this.messagesService.showMessage(`Error loadin courses!`, 'error');
             console.error(error);
         }
     }
